@@ -4,6 +4,7 @@ const initialState = {
   machines: [],
   loading: false,
   error: null,
+  selectedMachine: null,
 };
 
 const machinesSlice = createSlice({
@@ -17,9 +18,7 @@ const machinesSlice = createSlice({
     updateMachine: (state, action) => {
       const updated = action.payload;
 
-      const index = state.machines.findIndex(
-        (m) => m.id === updated.id
-      );
+      const index = state.machines.findIndex((m) => m.id === updated.id);
 
       if (index !== -1) {
         state.machines[index] = updated;
@@ -33,14 +32,18 @@ const machinesSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+
+    setSelectedMachine: (state, action) => {
+      state.selectedMachine = action.payload;
+    },
+
+    clearSelectedMachine: (state) => {
+      state.selectedMachine = null;
+    },
   },
 });
 
-export const {
-  setMachines,
-  updateMachine,
-  setLoading,
-  setError,
-} = machinesSlice.actions;
+export const { setMachines, updateMachine, setLoading, setError, setSelectedMachine, clearSelectedMachine } =
+  machinesSlice.actions;
 
 export default machinesSlice.reducer;

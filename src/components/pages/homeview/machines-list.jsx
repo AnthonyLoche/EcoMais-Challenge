@@ -2,7 +2,7 @@ import CardMachine, { statusConfig } from "./card-machine";
 import { useMachines } from "../../../hooks";
 
 export default function MachineGroupedList() {
-  const { state } = useMachines();
+  const { state, selectMachine } = useMachines();
   const machines = state.machines ?? [];
 
   const grouped = Object.keys(statusConfig).reduce((acc, status) => {
@@ -10,6 +10,11 @@ export default function MachineGroupedList() {
     if (items.length > 0) acc[status] = items;
     return acc;
   }, {});
+
+  const handleSelectMachine = (machine) => {
+    console.log("MachineGroupedList: chamando selectMachine para:", machine.codigo);
+    selectMachine(machine);
+  };
 
   if (state.loading) {
     return (
@@ -74,7 +79,11 @@ export default function MachineGroupedList() {
                 {/* Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {items.map((machine) => (
-                    <CardMachine key={machine.id} machine={machine} />
+                    <CardMachine 
+                      key={machine.id} 
+                      machine={machine} 
+                      onSelectMachine={handleSelectMachine}
+                    />
                   ))}
                 </div>
               </section>

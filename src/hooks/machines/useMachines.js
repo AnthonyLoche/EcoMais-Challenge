@@ -1,14 +1,14 @@
 import { MachinesService } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import {
   setMachines,
   updateMachine as updateMachineAction,
   setLoading,
   setError,
+  setSelectedMachine,
 } from "../../store/slices/machinesSlice";
 
-// 🎨 CONFIG CENTRAL (igual enums/config do backend)
 import {
   Package,
   Wrench,
@@ -60,31 +60,33 @@ export function useMachines() {
 
   const machinesByStatus = useMemo(() => {
     const machines = state.machines || {};
-    const list = machines.machines || machines; // fallback se vier direto array
+    const list = machines.machines || machines; 
 
     const statusMap = {};
 
-    list.forEach((machine) => {
-      const status = machine.status;
+    if (Array.isArray(list)) {
+      list.forEach((machine) => {
+        const status = machine.status;
 
-      if (!statusMap[status]) {
-        const config = statusConfig[status] || {
-          color: "#64748b",
-          icon: Package,
-        };
+        if (!statusMap[status]) {
+          const config = statusConfig[status] || {
+            color: "#64748b",
+            icon: Package,
+          };
 
-        statusMap[status] = {
-          status,
-          count: 0,
-          machines: [],
-          color: config.color,
-          icon: config.icon,
-        };
-      }
+          statusMap[status] = {
+            status,
+            count: 0,
+            machines: [],
+            color: config.color,
+            icon: config.icon,
+          };
+        }
 
-      statusMap[status].count++;
-      statusMap[status].machines.push(machine);
-    });
+        statusMap[status].count++;
+        statusMap[status].machines.push(machine);
+      });
+    }
 
     return Object.values(statusMap);
   }, [state.machines]);
@@ -113,9 +115,22 @@ export function useMachines() {
     }
   };
 
+  const selectMachine = useCallback((machine) => {
+    console.log("Selecionando máquina:", machine);
+    dispatch(setSelectedMachine(machine));
+  }, [dispatch]);
+
+  const clearSelectedMachine = useCallback(() => {
+    console.log("Limpando máquina selecionada");
+    dispatch(clearSelectedMachine());
+  }, [dispatch]);
+
   return {
     state,
     machinesByStatus,
+    selectedMachine: state.selectedMachine,
+    selectMachine,
+    clearSelectedMachine,
     getMachines,
     updateMachine,
   };

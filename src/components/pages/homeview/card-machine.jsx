@@ -10,6 +10,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const statusConfig = {
   Operando: { color: "#22c55e", icon: Activity },
   Parada: { color: "#ef4444", icon: Power },
@@ -31,9 +32,15 @@ function formatDate(iso) {
   });
 }
 
-export default function CardMachine({ machine }) {
+export default function CardMachine({ machine, onSelectMachine }) {
   const s = statusConfig[machine.status] ?? { color: "#6b7280", icon: Package };
   const StatusIcon = s.icon;
+
+  const handleSelect = () => {
+    if (onSelectMachine) {
+      onSelectMachine(machine);
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 flex flex-col h-full">
@@ -51,7 +58,7 @@ export default function CardMachine({ machine }) {
           </h3>
         </div>
 
-        {/* Status badge - agora com flex-shrink-0 para não quebrar */}
+        {/* Status badge */}
         <span
           className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shrink-0 border whitespace-nowrap"
           style={{
@@ -71,7 +78,7 @@ export default function CardMachine({ machine }) {
         style={{ backgroundColor: `${s.color}25` }}
       />
 
-      {/* Info rows - espaçamento fixo */}
+      {/* Info rows */}
       <div className="flex flex-col gap-2 mb-3">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <MapPin
@@ -100,7 +107,7 @@ export default function CardMachine({ machine }) {
         </div>
       </div>
 
-      {/* Alertas - altura fixa para a área de alertas */}
+      {/* Alertas */}
       <div className="mt-auto">
         {machine.alertas.length > 0 ? (
           <div
@@ -144,15 +151,11 @@ export default function CardMachine({ machine }) {
         )}
 
         <button
+          onClick={handleSelect}
           className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg
             border border-gray-100 text-xs font-medium text-gray-400
             hover:border-gray-200 hover:text-gray-600 hover:bg-gray-50
             transition-all duration-150 mt-4"
-          style={
-            { backgroundColor: s.color,
-              color: "#fff",
-             }
-        }
         >
           Ver detalhes
           <ChevronRight size={13} strokeWidth={2} />

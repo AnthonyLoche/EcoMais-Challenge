@@ -5,7 +5,6 @@ import {
   ThermometerSun, Cpu, Activity, Power,
 } from "lucide-react";
 
-// ── dados mock ───────────────────────────────────────────────────────────────
 const criticos = [
   { id: 203, codigo: "Torno CNC 203",          status: "Temp. Alta",      color: "#ef4444", icon: ThermometerSun },
   { id: 310, codigo: "Centro de Usinagem 310",  status: "Vibração Alta",   color: "#ec4899", icon: Waves         },
@@ -38,7 +37,6 @@ const metricas = [
   { label: "Em alerta",  value:  6, total: 28, color: "#f97316" },
   { label: "Paradas",    value:  4, total: 28, color: "#ef4444" },
 ];
-// ─────────────────────────────────────────────────────────────────────────────
 
 function DonutChart({ data }) {
   const total = data.reduce((s, d) => s + d.count, 0);

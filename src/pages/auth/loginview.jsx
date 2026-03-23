@@ -8,6 +8,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import logo from "../../assets/images/logo.png";
+import { useAuth } from "../../hooks";
 
 export default function LoginView() {
   const [formData, setFormData] = useState({
@@ -15,9 +16,11 @@ export default function LoginView() {
     password: "",
     remember: false,
   });
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [localError, setLocalError] = useState("");
+  
   const navigate = useNavigate();
+  const { login, isLoading, error: authError } = useAuth();
 
   const handleInputChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -29,16 +32,35 @@ export default function LoginView() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLocalError("");
+
     try {
-      await new Promise((r) => setTimeout(r, 1200));
-      navigate("/");
+      const success = await login({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (success) {
+        // Salva a opção "lembrar" no localStorage
+        if (formData.remember) {
+          localStorage.setItem("rememberEmail", formData.email);
+        } else {
+          localStorage.removeItem("rememberEmail");
+        }
+        
+        navigate("/");
+      }
     } catch (err) {
       console.error(err);
-    } finally {
-      setIsLoading(false);
+      setLocalError("Erro ao conectar com o servidor");
     }
   };
+
+  // Recupera email salvo se existir
+  const rememberedEmail = localStorage.getItem("rememberEmail");
+  if (rememberedEmail && !formData.email) {
+    setFormData(prev => ({ ...prev, email: rememberedEmail, remember: true }));
+  }
 
   return (
     <>
@@ -290,6 +312,15 @@ export default function LoginView() {
                   </button>
                 </div>
               </div>
+
+              {/* Error Message */}
+              {(localError || authError) && (
+                <div className="fade-up delay-3">
+                  <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                    {localError || authError}
+                  </p>
+                </div>
+              )}
 
               {/* Remember */}
               <div className="fade-up delay-4 flex items-center gap-3">
