@@ -57,7 +57,7 @@ export default function HeaderMain() {
 
   return (
     <header className="w-full bg-[#0d1117] border-b border-white/5 select-none">
-      <div className="w-[80%] mx-auto p-4">
+      <div className="w-[90%] mx-auto p-4">
         <div className="flex items-center h-12 gap-8">
 
           {/* Logo */}
