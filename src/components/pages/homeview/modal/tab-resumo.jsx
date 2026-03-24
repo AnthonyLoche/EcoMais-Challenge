@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // tabs/TabResumo.jsx
 import { useMemo } from "react";
 import { Gauge, Zap, Thermometer, Clock } from "lucide-react";

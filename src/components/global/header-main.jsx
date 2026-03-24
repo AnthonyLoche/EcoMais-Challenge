@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -29,16 +30,7 @@ export default function HeaderMain() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  const getActiveItem = () => {
-    const activeNav = navItems.find((item) => item.path === location.pathname);
-    return activeNav ? activeNav.label : "Análise";
-  };
-
-  const [activeItem, setActiveItem] = useState(getActiveItem());
-
-  useEffect(() => {
-    setActiveItem(getActiveItem());
-  }, [location.pathname]);
+  const activeItem = navItems.find((item) => item.path === location.pathname)?.label || "Análise";
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -62,7 +54,6 @@ export default function HeaderMain() {
     { label: "Logout", icon: LogOut, action: handleLogout, danger: true },
   ];
 
-  // Obter iniciais do usuário para o avatar
   const getUserInitials = () => {
     if (user?.email) {
       const name = user.email.split("@")[0];
@@ -92,12 +83,10 @@ export default function HeaderMain() {
     <header className="w-full bg-[#0d1117] border-b border-white/5 select-none">
       <div className="w-[90%] mx-auto p-4">
         <div className="flex items-center h-12 gap-8">
-          {/* Logo */}
           <Link to="/" className="flex items-center shrink-0">
             <img src={logo} alt="Logo" className="w-full h-14 mr-2" />
           </Link>
 
-          {/* Nav Links */}
           <nav className="flex items-center gap-1 flex-1">
             {navItems.map(({ label, icon: Icon, path }) => {
               const isActive = activeItem === label;
@@ -105,7 +94,6 @@ export default function HeaderMain() {
                 <Link
                   key={label}
                   to={path}
-                  onClick={() => setActiveItem(label)}
                   className={`
                     flex items-center gap-2 px-4 py-2 rounded text-base font-medium
                     transition-colors duration-150
@@ -116,6 +104,7 @@ export default function HeaderMain() {
                     }
                   `}
                 >
+                  {/* eslint-disable-next-line no-unused-vars */}
                   <Icon
                     size={18}
                     className={isActive ? "text-green-400" : "text-gray-500"}
@@ -127,29 +116,28 @@ export default function HeaderMain() {
             })}
           </nav>
 
-          {/* Actions */}
           <div className="flex items-center gap-1 shrink-0">
-            {/* Search */}
             <button
               onClick={() => navigate("/busca")}
               className="p-2 text-gray-400 hover:text-gray-200 hover:bg-white/5 rounded transition-colors"
+              aria-label="Buscar"
             >
               <Search size={18} strokeWidth={1.8} />
             </button>
 
-            {/* Bell */}
             <button
               onClick={() => navigate("/notificacoes")}
               className="p-2 text-gray-400 hover:text-gray-200 hover:bg-white/5 rounded transition-colors"
+              aria-label="Notificações"
             >
               <Bell size={18} strokeWidth={1.8} />
             </button>
 
-            {/* Avatar + Dropdown */}
             <div className="relative ml-1" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen((prev) => !prev)}
                 className="flex items-center gap-1.5 pl-1 pr-1 py-1 rounded hover:bg-white/5 transition-colors"
+                aria-label="Menu do usuário"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
                   {getUserInitials()}
@@ -163,10 +151,8 @@ export default function HeaderMain() {
                 />
               </button>
 
-              {/* Dropdown Menu */}
               {dropdownOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 bg-[#161b22] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50">
-                  {/* Info do usuário */}
                   <div className="px-4 py-3 border-b border-white/10">
                     <p className="text-sm font-semibold text-white">
                       {getUserName()}
@@ -176,7 +162,6 @@ export default function HeaderMain() {
                     </p>
                   </div>
 
-                  {/* Itens do menu */}
                   <div className="py-1">
                     {dropdownItems.map(
                       ({ label, icon: Icon, path, action, danger }) => (
@@ -191,15 +176,16 @@ export default function HeaderMain() {
                             }
                           }}
                           className={`
-                          w-full flex items-center gap-3 px-4 py-2.5 text-sm
-                          transition-colors duration-150
-                          ${
-                            danger
-                              ? "text-red-400 hover:bg-red-500/10"
-                              : "text-gray-400 hover:text-gray-100 hover:bg-white/5"
-                          }
-                        `}
+                            w-full flex items-center gap-3 px-4 py-2.5 text-sm
+                            transition-colors duration-150
+                            ${
+                              danger
+                                ? "text-red-400 hover:bg-red-500/10"
+                                : "text-gray-400 hover:text-gray-100 hover:bg-white/5"
+                            }
+                          `}
                         >
+                          {/* eslint-disable-next-line no-unused-vars */}
                           <Icon size={15} strokeWidth={1.8} />
                           {label}
                         </button>

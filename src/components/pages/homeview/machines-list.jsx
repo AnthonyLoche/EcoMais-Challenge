@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useEffect } from "react";
+import { useCallback, useMemo, useEffect } from "react";
 import CardMachine, { statusConfig } from "./card-machine";
 import { useMachines } from "../../../hooks";
 import MachineModal from "./modal/machine-modal";
@@ -7,7 +7,6 @@ export default function MachineGroupedList() {
   const { state, selectMachine, selectedMachine, clearSelectedMachine } =
     useMachines();
   const machines = state.machines ?? [];
-  const modalRef = useRef(null);
 
   const grouped = useMemo(() => {
     return Object.keys(statusConfig).reduce((acc, status) => {

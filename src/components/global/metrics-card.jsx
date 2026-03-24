@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { ChevronRight } from "lucide-react";
 
 export default function MetricCard({
@@ -11,7 +12,6 @@ export default function MetricCard({
       className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden flex flex-col"
       style={{ borderBottom: `3px solid ${color}` }}
     >
-      {/* Conteúdo */}
       <div className="flex items-center gap-4 px-5 py-3 flex-1">
         <div
           className="w-12 h-12 rounded-xl flex items-center justify-center"

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // MachineSidebar.jsx
 import { useState, useMemo, useCallback } from "react";
 import {
@@ -13,6 +14,14 @@ import {
   Power,
   TrendingDown,
 } from "lucide-react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
 import { useMachines } from "../../../hooks";
 
 const getStatusColor = (status) => {
@@ -51,43 +60,42 @@ const getAlertColor = (alert) => {
   return "#94a3b8";
 };
 
+// Componente DonutChart usando Recharts
 function DonutChart({ data }) {
   const total = data.reduce((s, d) => s + d.count, 0);
   if (total === 0) return null;
 
-  const size = 72;
-  const r = 25;
-  const circumference = 2 * Math.PI * r;
-  let offset = 0;
-  const slices = data.map((d) => {
-    const dash = (d.count / total) * circumference;
-    const slice = { ...d, dash, gap: circumference - dash, offset };
-    offset += dash;
-    return slice;
-  });
+  const COLORS = data.map((d) => d.color);
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
-      className="shrink-0"
-    >
-      {slices.map((s, i) => (
-        <circle
-          key={i}
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          fill="none"
-          stroke={s.color}
-          strokeWidth={9}
-          strokeDasharray={`${s.dash} ${s.gap}`}
-          strokeDashoffset={-s.offset}
-          style={{ transform: "rotate(-90deg)", transformOrigin: "center" }}
-        />
-      ))}
-    </svg>
+    <div className="w-[72px] h-[72px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            innerRadius={25}
+            outerRadius={32}
+            paddingAngle={3}
+            dataKey="count"
+            stroke="none"
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+            ))}
+          </Pie>
+          <Tooltip
+            formatter={(value) => [`${value} alertas`, ""]}
+            contentStyle={{
+              borderRadius: 8,
+              fontSize: 11,
+              padding: "4px 8px",
+            }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
 
@@ -149,7 +157,6 @@ export default function MachineSidebar() {
     useMachines();
   const machines = state.machines ?? [];
 
-  // Função para processar dados (fora do useMemo para evitar referências instáveis)
   const processMachineData = useCallback((machinesList) => {
     if (!machinesList.length) {
       return { criticos: [], atencao: [], resumo: [], metricas: [] };
@@ -191,6 +198,7 @@ export default function MachineSidebar() {
     });
 
     const resumoList = Object.entries(alertasMap).map(([label, count]) => ({
+      name: label,
       label,
       count,
       color: getAlertColor(label),
