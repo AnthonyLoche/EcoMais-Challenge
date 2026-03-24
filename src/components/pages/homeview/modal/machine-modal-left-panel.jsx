@@ -41,7 +41,6 @@ export default function MachineModalLeftPanel({ machine }) {
             <Cpu size={40} strokeWidth={1} className="text-gray-300" />
           )}
 
-          {/* Status badge */}
           <span
             className="absolute top-2 left-2 flex items-center gap-1 text-[9px] font-bold px-1.5 py-0.5 rounded-full border"
             style={{

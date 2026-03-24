@@ -64,7 +64,6 @@ export default function CardsSection() {
     return () => clearTimeout(t);
   }, [cardsPerView, offset]);
 
-  // Teleporte sem animação ao sair da zona de clones
   useEffect(() => {
     if (!transitioning || total === 0) return;
 
@@ -87,7 +86,6 @@ export default function CardsSection() {
     }
   }, [current, total, offset, transitioning]);
 
-  // Reativa transição após teleporte instantâneo
   useEffect(() => {
     if (!transitioning) {
       const t = setTimeout(() => setTransitioning(true), 20);
@@ -105,7 +103,6 @@ export default function CardsSection() {
   const next = () => navigate(1);
   const prev = () => navigate(-1);
 
-  // Índice real para highlight dos dots (0..total-1)
   const realIndex = ((current - offset) % total + total) % total;
 
   if (total === 0) return null;
@@ -115,7 +112,6 @@ export default function CardsSection() {
   return (
     <div className="w-[90%] mx-auto my-8">
       <div className="relative">
-        {/* Botão anterior */}
         <button
           onClick={prev}
           className="absolute -left-5 top-1/2 -translate-y-1/2 z-10
@@ -127,7 +123,6 @@ export default function CardsSection() {
           <ChevronLeft size={18} strokeWidth={2.5} />
         </button>
 
-        {/* Botão próximo */}
         <button
           onClick={next}
           className="absolute -right-5 top-1/2 -translate-y-1/2 z-10
