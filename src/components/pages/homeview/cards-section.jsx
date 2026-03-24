@@ -1,57 +1,121 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { MetricsCard } from "../../";
 import { useMachines } from "../../../hooks";
 
+function useCardsPerView() {
+  const getCards = () => (window.innerWidth >= 768 ? 4 : 1);
+  const [cardsPerView, setCardsPerView] = useState(getCards);
+
+  useEffect(() => {
+    const handler = () => setCardsPerView(getCards());
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+
+  return cardsPerView;
+}
+
+/**
+ * Monta o array de slides com `cardsPerView` clones em cada extremidade,
+ * garantindo que nunca apareçam slots vazios independente do número de
+ * cards visíveis.
+ *
+ * Layout:  [ ...clonesFim | ...original | ...clonesInicio ]
+ * O índice "real 0" fica na posição `cloneCount` dentro do array.
+ */
+function buildSlides(items, cardsPerView) {
+  const n = items.length;
+  if (n === 0) return { slides: [], offset: 0 };
+
+  const cloneCount = cardsPerView;
+
+  const headClones = Array.from(
+    { length: cloneCount },
+    (_, i) => items[(n - cloneCount + i + n) % n]
+  );
+
+  const tailClones = Array.from(
+    { length: cloneCount },
+    (_, i) => items[i % n]
+  );
+
+  return {
+    slides: [...headClones, ...items, ...tailClones],
+    offset: cloneCount,
+  };
+}
+
 export default function CardsSection() {
   const { machinesByStatus } = useMachines();
-  const [current, setCurrent] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(true);
+  const cardsPerView = useCardsPerView();
 
   const total = machinesByStatus?.length ?? 0;
+  const { slides, offset } = buildSlides(machinesByStatus ?? [], cardsPerView);
+
+  const [current, setCurrent] = useState(offset);
+  const [transitioning, setTransitioning] = useState(true);
+  const lockRef = useRef(false);
 
   useEffect(() => {
-    if (total === 0) return;
+    setCurrent(offset);
+    setTransitioning(false);
+    const t = setTimeout(() => setTransitioning(true), 20);
+    return () => clearTimeout(t);
+  }, [cardsPerView, offset]);
 
-    if (current === total) {
+  // Teleporte sem animação ao sair da zona de clones
+  useEffect(() => {
+    if (!transitioning || total === 0) return;
+
+    const realEnd = offset + total;
+
+    if (current >= realEnd) {
       const t = setTimeout(() => {
-        setIsTransitioning(false);
-        setCurrent(0);
+        setTransitioning(false);
+        setCurrent((c) => c - total);
       }, 350);
       return () => clearTimeout(t);
     }
 
-    if (current === -1) {
+    if (current < offset) {
       const t = setTimeout(() => {
-        setIsTransitioning(false);
-        setCurrent(total - 1);
+        setTransitioning(false);
+        setCurrent((c) => c + total);
       }, 350);
       return () => clearTimeout(t);
     }
-  }, [current, total]);
+  }, [current, total, offset, transitioning]);
 
+  // Reativa transição após teleporte instantâneo
   useEffect(() => {
-    if (!isTransitioning) {
-      const t = setTimeout(() => setIsTransitioning(true), 20);
+    if (!transitioning) {
+      const t = setTimeout(() => setTransitioning(true), 20);
       return () => clearTimeout(t);
     }
-  }, [isTransitioning]);
+  }, [transitioning]);
+
+  const navigate = (dir) => {
+    if (lockRef.current) return;
+    lockRef.current = true;
+    setCurrent((c) => c + dir);
+    setTimeout(() => { lockRef.current = false; }, 380);
+  };
+
+  const next = () => navigate(1);
+  const prev = () => navigate(-1);
+
+  // Índice real para highlight dos dots (0..total-1)
+  const realIndex = ((current - offset) % total + total) % total;
 
   if (total === 0) return null;
 
-  const slides = [
-    machinesByStatus[total - 1],
-    ...machinesByStatus,
-    machinesByStatus[0],
-  ];
-
-  const goTo = (index) => setCurrent(index);
-  const next = () => goTo(current + 1);
-  const prev = () => goTo(current - 1);
+  const cardWidth = 100 / cardsPerView;
 
   return (
     <div className="w-[90%] mx-auto my-8">
       <div className="relative">
+        {/* Botão anterior */}
         <button
           onClick={prev}
           className="absolute -left-5 top-1/2 -translate-y-1/2 z-10
@@ -63,6 +127,7 @@ export default function CardsSection() {
           <ChevronLeft size={18} strokeWidth={2.5} />
         </button>
 
+        {/* Botão próximo */}
         <button
           onClick={next}
           className="absolute -right-5 top-1/2 -translate-y-1/2 z-10
@@ -78,12 +143,16 @@ export default function CardsSection() {
           <div
             className="flex"
             style={{
-              transform: `translateX(-${(current + 1) * 25}%)`,
-              transition: isTransitioning ? "transform 350ms ease-in-out" : "none",
+              transform: `translateX(-${current * cardWidth}%)`,
+              transition: transitioning ? "transform 350ms ease-in-out" : "none",
             }}
           >
             {slides.map((item, i) => (
-              <div key={i} className="w-1/4 flex-shrink-0 px-3">
+              <div
+                key={i}
+                className="flex-shrink-0 px-3"
+                style={{ width: `${cardWidth}%` }}
+              >
                 <MetricsCard
                   title={item?.status}
                   value={item?.count}
@@ -94,8 +163,24 @@ export default function CardsSection() {
             ))}
           </div>
         </div>
+
+        <div className="flex justify-center gap-1.5 mt-4 md:hidden">
+          {(machinesByStatus ?? []).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrent(offset + i)}
+              aria-label={`Ir para card ${i + 1}`}
+              className={`
+                rounded-full transition-all duration-300
+                ${realIndex === i
+                  ? "w-4 h-2 bg-gray-600"
+                  : "w-2 h-2 bg-gray-300 hover:bg-gray-400"
+                }
+              `}
+            />
+          ))}
+        </div>
       </div>
-    
     </div>
   );
 }

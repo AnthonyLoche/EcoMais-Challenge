@@ -11,11 +11,26 @@ import {
 } from "../pages/index";
 
 import { useAuth } from "../hooks";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export function ProtectedRoute() {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast.error("Acesso restrito", {
+        description: "Faça login para continuar.",
+        duration: 4000,
+      });
+    }
+  }, [isAuthenticated]);
+
+  return isAuthenticated
+    ? <Outlet />
+    : <Navigate to="/login" state={{ from: location }} replace />;
 }
 
 export function PublicRoute() {
