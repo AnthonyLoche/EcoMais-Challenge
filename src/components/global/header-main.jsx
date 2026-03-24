@@ -7,7 +7,6 @@ import {
   TrendingUp,
   Search,
   Bell,
-  X,
   ChevronDown,
   User,
   Settings,

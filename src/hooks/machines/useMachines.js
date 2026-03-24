@@ -4,11 +4,11 @@ import { useMemo, useCallback } from "react";
 import {
   setMachines,
   updateMachine as updateMachineAction,
-  setLoading,
   setError,
   setSelectedMachine,
   clearSelectedMachine,
 } from "../../store/slices/machinesSlice";
+import { useLoading } from "../global/useLoading";
 
 import {
   Package,
@@ -57,6 +57,7 @@ const statusConfig = {
 
 export function useMachines() {
   const dispatch = useDispatch();
+  const { withLoading } = useLoading();
   const state = useSelector((state) => state.machines);
 
   const machinesByStatus = useMemo(() => {
@@ -93,31 +94,30 @@ export function useMachines() {
   }, [state.machines]);
 
   const getMachines = useCallback(async () => {
-    dispatch(setLoading(true));
-    try {
-      const machines = await MachinesService.getMachines();
-      dispatch(setMachines(machines));
-    } catch (error) {
-      dispatch(setError(error.message));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [dispatch]);
+    return withLoading(async () => {
+      try {
+        const machines = await MachinesService.getMachines();
+        dispatch(setMachines(machines));
+        return machines;
+      } catch (error) {
+        dispatch(setError(error.message));
+        throw error;
+      }
+    }, "Carregando máquinas...");
+  }, [dispatch, withLoading]);
 
-  const updateMachine = useCallback(
-    async (id, payload) => {
-      dispatch(setLoading(true));
+  const updateMachine = useCallback(async (id, payload) => {
+    return withLoading(async () => {
       try {
         const updated = await MachinesService.updateMachine(id, payload);
         dispatch(updateMachineAction(updated));
+        return updated;
       } catch (error) {
         dispatch(setError(error.message));
-      } finally {
-        dispatch(setLoading(false));
+        throw error;
       }
-    },
-    [dispatch],
-  );
+    }, "Atualizando máquina...");
+  }, [dispatch, withLoading]);
 
   const selectMachine = useCallback(
     (machine) => {
@@ -169,7 +169,6 @@ export function useMachines() {
       dadosOrdenados[dadosOrdenados.length - 1].timestamp,
     );
 
-    // Calcular diferença em horas
     const diferencaMs = ultimoTimestamp - primeiroTimestamp;
     const totalHoras = diferencaMs / (1000 * 60 * 60);
 
