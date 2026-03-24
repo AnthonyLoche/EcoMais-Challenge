@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-// tabs/TabResumo.jsx
 import { useMemo } from "react";
 import { Gauge, Zap, Thermometer, Clock } from "lucide-react";
 
@@ -52,14 +51,12 @@ export default function TabResumo({ machine, calcularMetricasMaquinaFormatada })
 
   return (
     <div className="flex flex-col gap-4 h-full">
-      {/* Cards grid 2x2 */}
       <div className="grid grid-cols-2 gap-4">
         {stats.map((stat, index) => (
           <StatCard key={index} {...stat} />
         ))}
       </div>
 
-      {/* Período dos dados */}
       {metricasCalculadas?.periodo && (
         <div className="mt-auto pt-4 text-[10px] text-gray-400 text-center border-t border-gray-100">
           <div className="flex items-center justify-center gap-2">

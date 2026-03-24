@@ -44,7 +44,6 @@ export default function CardMachine({ machine, onSelectMachine }) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200 p-5 flex flex-col h-full">
-      {/* Header - altura fixa para o cabeçalho */}
       <div className="flex items-start justify-between gap-3 min-h-[50px]">
         <div className="flex-1 min-w-0">
           <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-0.5">
@@ -58,7 +57,6 @@ export default function CardMachine({ machine, onSelectMachine }) {
           </h3>
         </div>
 
-        {/* Status badge */}
         <span
           className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shrink-0 border whitespace-nowrap"
           style={{
@@ -72,13 +70,11 @@ export default function CardMachine({ machine, onSelectMachine }) {
         </span>
       </div>
 
-      {/* Divider with status color accent */}
       <div
         className="h-px w-full rounded-full my-2"
         style={{ backgroundColor: `${s.color}25` }}
       />
 
-      {/* Info rows */}
       <div className="flex flex-col gap-2 mb-3">
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <MapPin
@@ -107,7 +103,6 @@ export default function CardMachine({ machine, onSelectMachine }) {
         </div>
       </div>
 
-      {/* Alertas */}
       <div className="mt-auto">
         {machine.alertas.length > 0 ? (
           <div

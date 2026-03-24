@@ -1,4 +1,3 @@
-// MachineModal.jsx
 import { useState } from "react";
 import { useMachines } from "../../../../hooks";
 import MachineModalHeader from "./machine-modal-header";
@@ -43,15 +42,11 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
       <div
         className="
           bg-white shadow-2xl w-full flex flex-col overflow-hidden
-          /* mobile: bottom sheet com bordas arredondadas só em cima */
           rounded-t-2xl sm:rounded-2xl
-          /* mobile: quase tela cheia; desktop: altura limitada */
           h-[92vh] sm:h-[75vh]
-          /* desktop: largura máxima */
           sm:max-w-5xl
         "
       >
-        {/* Header — igual em todos os tamanhos */}
         <MachineModalHeader
           machine={machine}
           onPrev={onPrev}
@@ -59,14 +54,11 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
           onClose={onClose}
         />
 
-        {/* ── Desktop: painel esquerdo + conteúdo lado a lado ── */}
         <div className="hidden sm:flex flex-1 min-h-0">
-          {/* Left panel — 35% */}
           <div className="w-[35%] shrink-0 border-r border-gray-100 overflow-hidden">
             <MachineModalLeftPanel machine={machine} />
           </div>
 
-          {/* Right content — 65% */}
           <div className="w-[65%] flex flex-col min-w-0 overflow-hidden">
             <MachineModalTabs
               tabs={tabs}
@@ -81,14 +73,11 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
           </div>
         </div>
 
-        {/* ── Mobile: empilhado (foto + dados em cima, tabs embaixo) ── */}
         <div className="flex sm:hidden flex-col flex-1 min-h-0 overflow-hidden">
-          {/* Painel superior — foto + dados — altura fixa */}
           <div className="shrink-0 border-b border-gray-100 overflow-hidden" style={{ maxHeight: "38%" }}>
             <MachineModalLeftPanel machine={machine} />
           </div>
 
-          {/* Tabs + conteúdo — ocupa o restante */}
           <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
             <MachineModalTabs
               tabs={tabs}

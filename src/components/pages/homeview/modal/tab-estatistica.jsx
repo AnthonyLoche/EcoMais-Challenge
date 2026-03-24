@@ -1,4 +1,3 @@
-// tabs/TabEstatisticas.jsx
 import { useMemo } from "react";
 import {
   LineChart,
@@ -16,16 +15,14 @@ import {
 import { Gauge, Zap, Thermometer } from "lucide-react";
 
 export default function TabEstatisticas({ machine }) {
-  // Preparar dados para os gráficos
   const chartData = useMemo(() => {
     if (!machine.dados || machine.dados.length === 0) return [];
 
-    // Ordenar dados por timestamp
     const dadosOrdenados = [...machine.dados].sort(
       (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
     );
 
-    // Formatar dados para o gráfico
+
     return dadosOrdenados.map((dado) => ({
       timestamp: new Date(dado.timestamp).toLocaleTimeString("pt-BR", {
         hour: "2-digit",
@@ -38,7 +35,6 @@ export default function TabEstatisticas({ machine }) {
     }));
   }, [machine]);
 
-  // Calcular médias para as linhas de referência
   const medias = useMemo(() => {
     if (!machine.dados || machine.dados.length === 0) {
       return { rpm: 0, potencia: 0, temperatura: 0 };
@@ -73,7 +69,6 @@ export default function TabEstatisticas({ machine }) {
 
   return (
     <div className="flex flex-col gap-6 h-full overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
-      {/* Gráfico de RPM */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <div className="p-1.5 rounded-lg bg-green-50">
@@ -131,7 +126,6 @@ export default function TabEstatisticas({ machine }) {
         </ResponsiveContainer>
       </div>
 
-      {/* Gráfico de Potência */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <div className="p-1.5 rounded-lg bg-yellow-50">
@@ -189,7 +183,6 @@ export default function TabEstatisticas({ machine }) {
         </ResponsiveContainer>
       </div>
 
-      {/* Gráfico de Temperatura */}
       <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <div className="p-1.5 rounded-lg bg-red-50">

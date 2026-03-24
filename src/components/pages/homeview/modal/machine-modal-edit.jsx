@@ -1,4 +1,3 @@
-// tabs/TabEstatisticas.jsx (MachineModalEdit)
 import { useState } from "react";
 import { MapPin, FileText, Tag } from "lucide-react";
 import { toast } from "sonner";

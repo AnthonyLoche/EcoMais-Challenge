@@ -50,7 +50,6 @@ export default function HeaderMain() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  // Impede scroll quando o menu mobile está aberto
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -98,12 +97,10 @@ export default function HeaderMain() {
         <div className="w-[90%] mx-auto p-4">
           <div className="flex items-center h-12 gap-8">
 
-            {/* Logo */}
             <Link to="/" className="flex items-center shrink-0">
               <img src={logo} alt="Logo" className="w-full h-14 mr-2" />
             </Link>
 
-            {/* Nav desktop */}
             <nav className="hidden md:flex items-center gap-1 flex-1">
               {navItems.map(({ label, icon: Icon, path }) => {
                 const isActive = activeItem === label;
@@ -128,10 +125,8 @@ export default function HeaderMain() {
               })}
             </nav>
 
-            {/* Ações à direita */}
             <div className="flex items-center gap-2 ml-auto md:ml-0 shrink-0">
 
-              {/* Avatar + dropdown — SOMENTE DESKTOP */}
               <div className="hidden md:block relative" ref={dropdownRef}>
                 <button
                   onClick={() => setDropdownOpen((prev) => !prev)}
@@ -184,7 +179,6 @@ export default function HeaderMain() {
                 )}
               </div>
 
-              {/* Botão hamburger — somente mobile */}
               <button
                 className="md:hidden flex items-center justify-center w-9 h-9 rounded hover:bg-white/5 transition-colors text-gray-400"
                 onClick={() => setMobileMenuOpen((prev) => !prev)}
@@ -235,7 +229,6 @@ export default function HeaderMain() {
           </button>
         </div>
 
-        {/* Itens de navegação */}
         <nav className="flex-1 overflow-y-auto py-3">
           <p className="px-5 pb-2 text-xs font-medium text-gray-600 uppercase tracking-wider">
             Navegação
@@ -265,7 +258,6 @@ export default function HeaderMain() {
             );
           })}
 
-          {/* Divisor */}
           <div className="my-3 mx-5 border-t border-white/5" />
 
           <p className="px-5 pb-2 text-xs font-medium text-gray-600 uppercase tracking-wider">

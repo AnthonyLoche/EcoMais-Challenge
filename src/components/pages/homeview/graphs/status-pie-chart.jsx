@@ -29,7 +29,6 @@ export default function StatusPieChart({ machines }) {
       statusCount[status] = (statusCount[status] || 0) + 1;
     });
 
-    // Converter para o formato do gráfico
     return Object.entries(statusCount).map(([name, value]) => ({
       name,
       value,

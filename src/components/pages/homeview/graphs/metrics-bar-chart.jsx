@@ -11,7 +11,6 @@ export default function MetricsBarChart({ machines, calcularMetricasMaquinaForma
 
     const operatingMachines = machines.filter(m => m.status === "Operando");
     
-    // Calcular métricas para cada máquina operando
     return operatingMachines.map(machine => {
       const metricas = calcularMetricasMaquinaFormatada(machine);
       return {

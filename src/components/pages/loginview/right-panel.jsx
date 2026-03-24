@@ -40,7 +40,6 @@ export default function RightPanel() {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center p-8 md:p-16 relative bg-white font-['DM_Sans']">
-      {/* Faint top-right blob */}
       <div className="absolute top-0 right-0 w-72 h-72 bg-green-50 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-[400px]">
@@ -56,7 +55,6 @@ export default function RightPanel() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Field */}
           <div className="opacity-0 animate-[fadeUp_0.45s_ease_forwards] [animation-delay:0.1s] space-y-2">
             <label
               className="text-xs font-medium text-slate-500 uppercase tracking-wider"
@@ -82,7 +80,6 @@ export default function RightPanel() {
             </div>
           </div>
 
-          {/* Password Field */}
           <div className="opacity-0 animate-[fadeUp_0.45s_ease_forwards] [animation-delay:0.15s] space-y-2">
             <div className="flex items-center justify-between">
               <label
@@ -116,7 +113,6 @@ export default function RightPanel() {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="opacity-0 animate-[fadeUp_0.45s_ease_forwards] [animation-delay:0.25s] pt-2">
             <button
               className="w-full bg-green-600 hover:bg-green-700 text-white font-['Syne'] font-bold text-sm tracking-wide rounded-lg py-4 px-6 flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-green-600/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"

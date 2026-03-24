@@ -1,4 +1,3 @@
-// MachineModalLeftPanel.jsx
 import { MapPin, Cpu, AlertTriangle, Tag, Clock } from "lucide-react";
 import { statusConfig } from "../card-machine";
 import fresadora from "../../../../assets/images/machines/fresadora.png";
@@ -26,10 +25,8 @@ export default function MachineModalLeftPanel({ machine }) {
     <div className="w-full h-full flex flex-col sm:flex-col overflow-y-auto
                     [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
-      {/* ── Mobile: imagem + infos lado a lado em uma linha ── */}
       <div className="flex sm:hidden flex-row h-full">
 
-        {/* Imagem — metade esquerda */}
         <div className="relative w-2/5 shrink-0 bg-gray-50 flex items-center justify-center">
           {image ? (
             <img
@@ -54,7 +51,6 @@ export default function MachineModalLeftPanel({ machine }) {
           </span>
         </div>
 
-        {/* Infos — metade direita */}
         <div className="flex-1 p-3 flex flex-col justify-between overflow-y-auto
                         [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <div className="flex flex-col gap-1">
@@ -75,7 +71,6 @@ export default function MachineModalLeftPanel({ machine }) {
             </div>
           </div>
 
-          {/* Alertas */}
           {machine.alertas?.length > 0 && (
             <div className="flex flex-col gap-1 mt-2">
               {machine.alertas.map((alerta, i) => (
@@ -93,10 +88,8 @@ export default function MachineModalLeftPanel({ machine }) {
         </div>
       </div>
 
-      {/* ── Desktop: layout original (vertical) ── */}
       <div className="hidden sm:flex flex-col h-full">
 
-        {/* Imagem */}
         <div className="relative bg-gray-50 flex flex-col items-center justify-center h-[50%] shrink-0">
           {image ? (
             <img
@@ -127,7 +120,6 @@ export default function MachineModalLeftPanel({ machine }) {
           )}
         </div>
 
-        {/* Info */}
         <div className="p-4 flex flex-col gap-4">
           <div>
             <p className="text-[10px] text-gray-400 uppercase tracking-wider">

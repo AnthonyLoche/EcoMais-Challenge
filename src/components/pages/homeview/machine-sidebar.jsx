@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-// MachineSidebar.jsx
 import { useState, useMemo, useCallback } from "react";
 import {
   BarChart2,
@@ -20,7 +19,6 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 import { useMachines } from "../../../hooks";
 
@@ -60,7 +58,6 @@ const getAlertColor = (alert) => {
   return "#94a3b8";
 };
 
-// Componente DonutChart usando Recharts
 function DonutChart({ data }) {
   const total = data.reduce((s, d) => s + d.count, 0);
   if (total === 0) return null;
@@ -241,12 +238,10 @@ export default function MachineSidebar() {
     };
   }, []);
 
-  // Processar máquinas por status
   const { criticos, atencao, resumo, metricas } = useMemo(() => {
     return processMachineData(machines);
   }, [machines, processMachineData]);
 
-  // Previsões baseadas em dados reais
   const previsoes = useMemo(() => {
     const predictions = [];
 
@@ -323,7 +318,6 @@ export default function MachineSidebar() {
 
   return (
     <div className="w-full h-full bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
-      {/* Tabs */}
       <div className="flex items-center border-b border-gray-100 px-2 pt-2 shrink-0">
         {[
           { key: "analise", label: "Análise", icon: BarChart2 },
@@ -348,11 +342,9 @@ export default function MachineSidebar() {
         </button>
       </div>
 
-      {/* Body */}
       <div className="flex-1 flex flex-col overflow-hidden p-3 gap-3">
         {tab === "analise" ? (
           <>
-            {/* Métricas rápidas */}
             <div className="grid grid-cols-3 gap-2 shrink-0">
               {metricas.map(({ label, value, total, color }) => (
                 <div
@@ -385,7 +377,6 @@ export default function MachineSidebar() {
               ))}
             </div>
 
-            {/* Críticos */}
             {criticos.length > 0 && (
               <>
                 <div className="flex flex-col shrink-0">
@@ -408,7 +399,6 @@ export default function MachineSidebar() {
               </>
             )}
 
-            {/* Atenção */}
             {atencao.length > 0 && (
               <>
                 <div className="flex flex-col shrink-0">
@@ -431,7 +421,6 @@ export default function MachineSidebar() {
               </>
             )}
 
-            {/* Resumo dos Alertas */}
             {resumo.length > 0 && (
               <div className="shrink-0">
                 <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider px-1 mb-2">
@@ -465,7 +454,6 @@ export default function MachineSidebar() {
             )}
           </>
         ) : (
-          // Tab Previsões
           <div className="flex flex-col min-h-0 flex-1">
             <SectionTitle
               label="Previsões"

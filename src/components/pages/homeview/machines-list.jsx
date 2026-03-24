@@ -103,7 +103,6 @@ export default function MachineGroupedList() {
     return [...set].sort();
   }, [machines]);
 
-  // Filtragem
   const filteredMachines = useMemo(() => {
     return machines.filter((m) => {
       const q = search.toLowerCase();

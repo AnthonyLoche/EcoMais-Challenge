@@ -1,4 +1,3 @@
-// MachineModalTabs.jsx
 export default function MachineModalTabs({ tabs, activeTab, onTabChange }) {
   return (
     <div className="flex items-center gap-0.5 px-4 pt-3 border-b border-gray-100 shrink-0">

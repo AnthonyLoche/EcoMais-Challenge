@@ -1,4 +1,3 @@
-// views/LoginView.jsx
 import { LeftPanel, RightPanel } from "../../components";
 
 export default function LoginView() {
