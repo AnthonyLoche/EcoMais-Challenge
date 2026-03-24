@@ -78,7 +78,7 @@ export default function MachineGroupedList() {
     );
   }
 
-  if (state.error) {
+  if (state.errorFetch) {
     return (
       <div className="w-full h-full flex items-center justify-center">
         <p className="text-red-400 text-sm">Erro ao carregar máquinas.</p>

@@ -4,11 +4,13 @@ import { useMemo, useCallback } from "react";
 import {
   setMachines,
   updateMachine as updateMachineAction,
-  setError,
   setSelectedMachine,
   clearSelectedMachine,
+  setErrorUpdate,
+  setErrorFetch
 } from "../../store/slices/machinesSlice";
 import { useLoading } from "../global/useLoading";
+import { toast } from "sonner";
 
 import {
   Package,
@@ -21,44 +23,31 @@ import {
 } from "lucide-react";
 
 const statusConfig = {
-  Operando: {
-    color: "#22c55e",
-    icon: Activity,
-  },
-  Parada: {
-    color: "#ef4444",
-    icon: Power,
-  },
-  Manutenção: {
-    color: "#f59e0b",
-    icon: Wrench,
-  },
-  "Temp. Alta": {
-    color: "#f97316",
-    icon: AlertTriangle,
-  },
-  "Ferramenta Gasta": {
-    color: "#eab308",
-    icon: Wrench,
-  },
-  "Alerta de Potência": {
-    color: "#a855f7",
-    icon: Power,
-  },
-  "Baixa Produção": {
-    color: "#3b82f6",
-    icon: TrendingDown,
-  },
-  "Vibração Alta": {
-    color: "#ec4899",
-    icon: Waves,
-  },
+  Operando: { color: "#22c55e", icon: Activity },
+  Parada: { color: "#ef4444", icon: Power },
+  Manutenção: { color: "#f59e0b", icon: Wrench },
+  "Temp. Alta": { color: "#f97316", icon: AlertTriangle },
+  "Ferramenta Gasta": { color: "#eab308", icon: Wrench },
+  "Alerta de Potência": { color: "#a855f7", icon: Power },
+  "Baixa Produção": { color: "#3b82f6", icon: TrendingDown },
+  "Vibração Alta": { color: "#ec4899", icon: Waves },
 };
 
 export function useMachines() {
   const dispatch = useDispatch();
   const { withLoading } = useLoading();
   const state = useSelector((state) => state.machines);
+
+  const getErrorMessage = (error) => {
+    if (!error?.response) {
+      return "Sem conexão com o servidor ou bloqueio de CORS.";
+    }
+    return (
+      error.response?.data?.message ||
+      error.message ||
+      "Erro inesperado."
+    );
+  };
 
   const machinesByStatus = useMemo(() => {
     const machines = state.machines || {};
@@ -97,53 +86,74 @@ export function useMachines() {
     return withLoading(async () => {
       try {
         const machines = await MachinesService.getMachines();
+
+        if (!machines || typeof machines !== "object") {
+          throw new Error("Resposta inválida da API");
+        }
+
         dispatch(setMachines(machines));
-        return machines;
+        return { status: true, data: machines };
       } catch (error) {
-        dispatch(setError(error.message));
-        throw error;
+        const message = getErrorMessage(error);
+
+        console.error("getMachines error:", error);
+
+        dispatch(setErrorFetch(message));
+        toast.error(message);
+
+        return { status: false };
       }
     }, "Carregando máquinas...");
   }, [dispatch, withLoading]);
 
-  const updateMachine = useCallback(async (id, payload) => {
-    return withLoading(async () => {
-      try {
-        const updated = await MachinesService.updateMachine(id, payload);
-        dispatch(updateMachineAction(updated));
-        return updated;
-      } catch (error) {
-        dispatch(setError(error.message));
-        throw error;
-      }
-    }, "Atualizando máquina...");
-  }, [dispatch, withLoading]);
+  const updateMachine = useCallback(
+    async (id, payload) => {
+      return withLoading(async () => {
+        try {
+          const updated = await MachinesService.updateMachine(id, payload);
+
+          if (!updated || typeof updated !== "object") {
+            throw new Error("Resposta inválida da API");
+          }
+
+          dispatch(updateMachineAction(updated));
+
+          return { status: true, response: updated };
+        } catch (error) {
+          const message = getErrorMessage(error);
+
+          console.error("updateMachine error:", error);
+
+          dispatch(setErrorUpdate(message));
+
+          toast.error(message);
+
+          return { status: false };
+        }
+      }, "Atualizando máquina...");
+    },
+    [dispatch, withLoading],
+  );
 
   const selectMachine = useCallback(
     (machine) => {
-      console.log("Selecionando máquina:", machine?.codigo);
       dispatch(setSelectedMachine(machine));
     },
     [dispatch],
   );
 
   const clearSelectedMachineAction = useCallback(() => {
-    console.log("Limpando máquina selecionada");
     dispatch(clearSelectedMachine());
   }, [dispatch]);
 
   function calcularMetricasMaquina(machine) {
-    if (!machine || !machine.dados || machine.dados.length === 0) {
+    if (!machine?.dados?.length) {
       return {
         id: machine?.id || null,
         mediarpm: 0,
         mediapotencia: 0,
         mediatemperatura: 0,
-        periodo: {
-          inicio: null,
-          fim: null,
-          totalHoras: 0,
-        },
+        periodo: { inicio: null, fim: null, totalHoras: 0 },
       };
     }
 
@@ -169,28 +179,25 @@ export function useMachines() {
       dadosOrdenados[dadosOrdenados.length - 1].timestamp,
     );
 
-    const diferencaMs = ultimoTimestamp - primeiroTimestamp;
-    const totalHoras = diferencaMs / (1000 * 60 * 60);
+    const totalHoras =
+      (ultimoTimestamp - primeiroTimestamp) / (1000 * 60 * 60);
 
     return {
       id: machine.id,
-      mediarpm: Math.round(mediarpm * 100) / 100,
-      mediapotencia: Math.round(mediapotencia * 100) / 100,
-      mediatemperatura: Math.round(mediatemperatura * 100) / 100,
+      mediarpm: Number(mediarpm.toFixed(2)),
+      mediapotencia: Number(mediapotencia.toFixed(2)),
+      mediatemperatura: Number(mediatemperatura.toFixed(2)),
       periodo: {
         inicio: primeiroTimestamp.toISOString(),
         fim: ultimoTimestamp.toISOString(),
-        totalHoras: Math.round(totalHoras * 100) / 100,
+        totalHoras: Number(totalHoras.toFixed(2)),
       },
     };
   }
 
   function calcularMetricasMultiplasMaquinas(machines) {
-    if (!machines || !Array.isArray(machines)) {
-      return [];
-    }
-
-    return machines.map((machine) => calcularMetricasMaquina(machine));
+    if (!Array.isArray(machines)) return [];
+    return machines.map(calcularMetricasMaquina);
   }
 
   function calcularMetricasMaquinaFormatada(machine) {
@@ -202,8 +209,12 @@ export function useMachines() {
       mediapotenciaFormatado: `${metricas.mediapotencia.toLocaleString("pt-BR")} W`,
       mediatemperaturaFormatado: `${metricas.mediatemperatura.toLocaleString("pt-BR")} °C`,
       periodoFormatado: {
-        inicio: new Date(metricas.periodo.inicio).toLocaleString("pt-BR"),
-        fim: new Date(metricas.periodo.fim).toLocaleString("pt-BR"),
+        inicio: metricas.periodo.inicio
+          ? new Date(metricas.periodo.inicio).toLocaleString("pt-BR")
+          : "-",
+        fim: metricas.periodo.fim
+          ? new Date(metricas.periodo.fim).toLocaleString("pt-BR")
+          : "-",
         totalHoras: `${metricas.periodo.totalHoras.toLocaleString("pt-BR")} horas`,
       },
     };

@@ -18,28 +18,37 @@ export default function MachineModalEdit({ machine, onSave }) {
   };
 
   const handleSubmit = async () => {
-    // Validação dos campos obrigatórios
     if (!form.nome.trim()) {
       toast.error("O campo Nome é obrigatório.");
       return;
     }
+
     if (!form.local.trim()) {
       toast.error("O campo Local é obrigatório.");
       return;
     }
 
-    try {
-      const payload = {
-        codigo: form.nome.trim(),
-        descricao: form.descricao.trim(),
-        local: form.local.trim(),
-      };
+    const payload = {
+      nome: form.nome.trim(),
+      descricao: form.descricao.trim(),
+      local: form.local.trim(),
+    };
 
-      const updated = await updateMachine(machine.id, payload);
+    const result = await updateMachine(machine.id, payload);
+
+    console.log("Updated machine:", result);
+
+    if (!result) {
+      toast.error("Erro inesperado.");
+      return;
+    }
+
+    if (result.status) {
       toast.success("Máquina atualizada com sucesso!");
-      onSave?.(updated);
-    } catch (error) {
-      toast.error(error?.message ?? "Erro ao atualizar a máquina. Tente novamente.");
+
+      onSave?.(result.response);
+    } else {
+      console.warn("Falha ao atualizar máquina");
     }
   };
 
@@ -73,7 +82,10 @@ export default function MachineModalEdit({ machine, onSave }) {
   return (
     <div className="flex flex-col gap-3 h-full">
       {fields.map(({ key, label, icon, bg, placeholder, multiline }) => (
-        <div key={key} className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm">
+        <div
+          key={key}
+          className="bg-white rounded-xl border border-gray-100 p-4 shadow-sm"
+        >
           <div className="flex items-center gap-2 mb-3">
             <div className={`p-1.5 rounded-lg ${bg}`}>{icon}</div>
             <h3 className="text-sm font-semibold text-gray-700">{label}</h3>

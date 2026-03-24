@@ -13,12 +13,17 @@ class MachinesService {
 
   async updateMachine(id, payload) {
     try {
-      // Exemplo de payload: { nome: 'Torno CNC 203', descricao: 'Revisada', local: 'Setor B' }
-      const response = await api.post(`/maquinas/${id}`, payload);
+      const response = await api.put(`/maquinas/${id}`, payload);
       return response.data;
     } catch (error) {
-      console.error("Error updating machine:", error);
-      throw error;
+      if (!error.response) {
+        throw new Error("Sem conexão com o servidor. Verifique sua rede.");
+      }
+
+      throw new Error(
+        error.response?.data?.message ??
+          `Erro ${error.response.status} ao atualizar a máquina.`,
+      );
     }
   }
 }

@@ -10,9 +10,8 @@ export default function RightPanel() {
     password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [localError, setLocalError] = useState("");
 
-  const { login, isLoading, error: authError } = useAuth();
+  const { login, isLoading } = useAuth();
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -24,7 +23,6 @@ export default function RightPanel() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLocalError("");
 
     try {
       const success = await login({
@@ -37,7 +35,6 @@ export default function RightPanel() {
       }
     } catch (err) {
       console.error(err);
-      setLocalError("Erro ao conectar com o servidor");
     }
   };
 
@@ -118,15 +115,6 @@ export default function RightPanel() {
               </button>
             </div>
           </div>
-
-          {/* Error Message */}
-          {(localError || authError) && (
-            <div className="opacity-0 animate-[fadeUp_0.45s_ease_forwards] [animation-delay:0.15s]">
-              <p className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                {localError || authError}
-              </p>
-            </div>
-          )}
 
           {/* Submit Button */}
           <div className="opacity-0 animate-[fadeUp_0.45s_ease_forwards] [animation-delay:0.25s] pt-2">

@@ -1,4 +1,3 @@
-// components/GraphsSection.jsx
 import { useMachines } from "../../../hooks";
 import StatusPieChart from "./graphs/status-pie-chart";
 import MetricsBarChart from "./graphs/metrics-bar-chart";
@@ -22,11 +21,11 @@ export default function GraphsSection() {
     );
   }
 
-  if (state.error) {
+  if (state.errorFetch) {
     return (
       <div className="w-[90%] mx-auto my-8">
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
-          <p className="text-red-500">Erro ao carregar dados: {state.error}</p>
+          <p className="text-red-500">Erro ao carregar dados: {state.errorFetch}</p>
         </div>
       </div>
     );

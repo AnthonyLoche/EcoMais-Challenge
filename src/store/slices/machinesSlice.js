@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   machines: [],
   loading: false,
-  error: null,
+  errorFetch: null,
+  errorUpdate: null,
   selectedMachine: null,
 };
 
@@ -29,8 +30,12 @@ const machinesSlice = createSlice({
       state.loading = action.payload;
     },
 
-    setError: (state, action) => {
-      state.error = action.payload;
+    setErrorFetch: (state, action) => {
+      state.errorFetch = action.payload;
+    },
+
+    setErrorUpdate: (state, action) => {
+      state.errorUpdate = action.payload;
     },
 
     setSelectedMachine: (state, action) => {
@@ -43,7 +48,14 @@ const machinesSlice = createSlice({
   },
 });
 
-export const { setMachines, updateMachine, setLoading, setError, setSelectedMachine, clearSelectedMachine } =
-  machinesSlice.actions;
+export const {
+  setMachines,
+  updateMachine,
+  setLoading,
+  setSelectedMachine,
+  clearSelectedMachine,
+  setErrorUpdate,
+  setErrorFetch
+} = machinesSlice.actions;
 
 export default machinesSlice.reducer;

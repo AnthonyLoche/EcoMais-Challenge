@@ -1,4 +1,4 @@
-import { HeaderMain, TitleSection, CardsSection } from "../../components";
+import { HeaderMain, TitleSection, MachinesMain } from "../../components";
 
 export default function MachinesCNCView() {
 
@@ -6,6 +6,7 @@ export default function MachinesCNCView() {
     <div>
       <HeaderMain />
       <TitleSection title="Máquinas CNC" />
+      <MachinesMain />
     </div>
   )
 };

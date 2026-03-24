@@ -10,7 +10,7 @@ function App() {
     <Provider store={store}>
       <Loading />
       <Router />
-      <Toaster position="bottom-right" richColors />
+      <Toaster position="top-right" richColors />
     </Provider>
   );
 }

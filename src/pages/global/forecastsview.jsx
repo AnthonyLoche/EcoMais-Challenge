@@ -1,11 +1,11 @@
-import { HeaderMain, TitleSection } from "../../components";
+import { HeaderMain, TitleSection, ComingSoon } from "../../components";
 
 export default function ForecastsView() {
-
   return (
     <div>
       <HeaderMain />
-        <TitleSection title="Previsões" />
+      <TitleSection title="Previsões" />
+      <ComingSoon />
     </div>
-  )
-};
+  );
+}
