@@ -14,6 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import logo from "../../assets/images/logo.png";
+import { useAuth } from "../../hooks";
 
 const navItems = [
   { label: "Visão Geral", icon: Monitor, path: "/" },
@@ -22,15 +23,10 @@ const navItems = [
   { label: "Previsões", icon: TrendingUp, path: "/forecasts" },
 ];
 
-const dropdownItems = [
-  { label: "Perfil", icon: User, path: "/perfil" },
-  { label: "Configurações", icon: Settings, path: "/configuracoes" },
-  { label: "Logout", icon: LogOut, path: "/login", danger: true },
-];
-
 export default function HeaderMain() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -54,6 +50,41 @@ export default function HeaderMain() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+    setDropdownOpen(false);
+  };
+
+  const dropdownItems = [
+    { label: "Perfil", icon: User, path: "/perfil" },
+    { label: "Configurações", icon: Settings, path: "/configuracoes" },
+    { label: "Logout", icon: LogOut, action: handleLogout, danger: true },
+  ];
+
+  // Obter iniciais do usuário para o avatar
+  const getUserInitials = () => {
+    if (user?.email) {
+      const name = user.email.split('@')[0];
+      return name.substring(0, 2).toUpperCase();
+    }
+    return "AP";
+  };
+
+  const getUserName = () => {
+    if (user?.email) {
+      const name = user.email.split('@')[0];
+      return name.replace(/\./g, ' ').replace(/_/g, ' ').split(' ').map(
+        word => word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ');
+    }
+    return "Usuário";
+  };
+
+  const getUserEmail = () => {
+    return user?.email || "usuario@eco.com";
+  };
 
   return (
     <header className="w-full bg-[#0d1117] border-b border-white/5 select-none">
@@ -112,14 +143,14 @@ export default function HeaderMain() {
               <Bell size={18} strokeWidth={1.8} />
             </button>
 
-             {/* Avatar + Dropdown */}
+            {/* Avatar + Dropdown */}
             <div className="relative ml-1" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen((prev) => !prev)}
                 className="flex items-center gap-1.5 pl-1 pr-1 py-1 rounded hover:bg-white/5 transition-colors"
               >
                 <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
-                  AP
+                  {getUserInitials()}
                 </div>
                 <ChevronDown
                   size={14}
@@ -135,18 +166,22 @@ export default function HeaderMain() {
                 <div className="absolute right-0 top-full mt-2 w-48 bg-[#161b22] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50">
                   {/* Info do usuário */}
                   <div className="px-4 py-3 border-b border-white/10">
-                    <p className="text-sm font-semibold text-white">Ana Paula</p>
-                    <p className="text-xs text-gray-500 truncate">ana.paula@eco.com</p>
+                    <p className="text-sm font-semibold text-white">{getUserName()}</p>
+                    <p className="text-xs text-gray-500 truncate">{getUserEmail()}</p>
                   </div>
 
                   {/* Itens do menu */}
                   <div className="py-1">
-                    {dropdownItems.map(({ label, icon: Icon, path, danger }) => (
+                    {dropdownItems.map(({ label, icon: Icon, path, action, danger }) => (
                       <button
                         key={label}
                         onClick={() => {
-                          setDropdownOpen(false);
-                          navigate(path);
+                          if (action) {
+                            action();
+                          } else if (path) {
+                            setDropdownOpen(false);
+                            navigate(path);
+                          }
                         }}
                         className={`
                           w-full flex items-center gap-3 px-4 py-2.5 text-sm
