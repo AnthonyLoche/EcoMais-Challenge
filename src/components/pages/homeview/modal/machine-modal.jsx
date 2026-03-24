@@ -16,10 +16,10 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
   if (!machine) return null;
 
   const tabs = [
-    { key: "resumo",       label: "Resumo"      },
-    { key: "historico",    label: "Histórico"   },
-    { key: "estatisticas", label: "Estatísticas"},
-    { key: "editar",       label: "Editar"      },
+    { key: "resumo",       label: "Resumo"       },
+    { key: "historico",    label: "Histórico"    },
+    { key: "estatisticas", label: "Estatísticas" },
+    { key: "editar",       label: "Editar"       },
   ];
 
   const renderTabContent = () => {
@@ -39,8 +39,19 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl h-[65vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/40 backdrop-blur-sm">
+      <div
+        className="
+          bg-white shadow-2xl w-full flex flex-col overflow-hidden
+          /* mobile: bottom sheet com bordas arredondadas só em cima */
+          rounded-t-2xl sm:rounded-2xl
+          /* mobile: quase tela cheia; desktop: altura limitada */
+          h-[92vh] sm:h-[75vh]
+          /* desktop: largura máxima */
+          sm:max-w-5xl
+        "
+      >
+        {/* Header — igual em todos os tamanhos */}
         <MachineModalHeader
           machine={machine}
           onPrev={onPrev}
@@ -48,7 +59,8 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
           onClose={onClose}
         />
 
-        <div className="flex flex-1 min-h-0">
+        {/* ── Desktop: painel esquerdo + conteúdo lado a lado ── */}
+        <div className="hidden sm:flex flex-1 min-h-0">
           {/* Left panel — 35% */}
           <div className="w-[35%] shrink-0 border-r border-gray-100 overflow-hidden">
             <MachineModalLeftPanel machine={machine} />
@@ -61,11 +73,31 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
               activeTab={activeTab}
               onTabChange={setActiveTab}
             />
-
             <div className="flex-1 min-h-0 overflow-hidden p-4">
               <div className="h-full">
                 {renderTabContent()}
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Mobile: empilhado (foto + dados em cima, tabs embaixo) ── */}
+        <div className="flex sm:hidden flex-col flex-1 min-h-0 overflow-hidden">
+          {/* Painel superior — foto + dados — altura fixa */}
+          <div className="shrink-0 border-b border-gray-100 overflow-hidden" style={{ maxHeight: "38%" }}>
+            <MachineModalLeftPanel machine={machine} />
+          </div>
+
+          {/* Tabs + conteúdo — ocupa o restante */}
+          <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <MachineModalTabs
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+            <div className="flex-1 min-h-0 overflow-y-auto p-4
+                            [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              {renderTabContent()}
             </div>
           </div>
         </div>
