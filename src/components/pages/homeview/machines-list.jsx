@@ -4,7 +4,8 @@ import { useMachines } from "../../../hooks";
 import MachineModal from "./modal/machine-modal";
 
 export default function MachineGroupedList() {
-  const { state, selectMachine, selectedMachine, clearSelectedMachine } = useMachines();
+  const { state, selectMachine, selectedMachine, clearSelectedMachine } =
+    useMachines();
   const machines = state.machines ?? [];
   const modalRef = useRef(null);
 
@@ -17,13 +18,19 @@ export default function MachineGroupedList() {
   }, [machines]);
 
   const allMachines = useMemo(() => {
-    return Object.values(grouped).flatMap(group => group.machines);
+    return Object.values(grouped).flatMap((group) => group.machines);
   }, [grouped]);
 
-  const handleSelectMachine = useCallback((machine) => {
-    console.log("MachineGroupedList: chamando selectMachine para:", machine.codigo);
-    selectMachine(machine);
-  }, [selectMachine]);
+  const handleSelectMachine = useCallback(
+    (machine) => {
+      console.log(
+        "MachineGroupedList: chamando selectMachine para:",
+        machine.codigo,
+      );
+      selectMachine(machine);
+    },
+    [selectMachine],
+  );
 
   const handleCloseModal = useCallback(() => {
     console.log("Fechando modal");
@@ -32,16 +39,22 @@ export default function MachineGroupedList() {
 
   const handlePrevMachine = useCallback(() => {
     if (selectedMachine && allMachines.length > 0) {
-      const currentIndex = allMachines.findIndex(m => m.id === selectedMachine.id);
-      const prevIndex = currentIndex > 0 ? currentIndex - 1 : allMachines.length - 1;
+      const currentIndex = allMachines.findIndex(
+        (m) => m.id === selectedMachine.id,
+      );
+      const prevIndex =
+        currentIndex > 0 ? currentIndex - 1 : allMachines.length - 1;
       selectMachine(allMachines[prevIndex]);
     }
   }, [selectedMachine, allMachines, selectMachine]);
 
   const handleNextMachine = useCallback(() => {
     if (selectedMachine && allMachines.length > 0) {
-      const currentIndex = allMachines.findIndex(m => m.id === selectedMachine.id);
-      const nextIndex = currentIndex < allMachines.length - 1 ? currentIndex + 1 : 0;
+      const currentIndex = allMachines.findIndex(
+        (m) => m.id === selectedMachine.id,
+      );
+      const nextIndex =
+        currentIndex < allMachines.length - 1 ? currentIndex + 1 : 0;
       selectMachine(allMachines[nextIndex]);
     }
   }, [selectedMachine, allMachines, selectMachine]);
@@ -49,7 +62,10 @@ export default function MachineGroupedList() {
   // Adicionar um efeito para log quando selectedMachine mudar
   useEffect(() => {
     if (selectedMachine) {
-      console.log("MachineGroupedList: selectedMachine atualizado:", selectedMachine.codigo);
+      console.log(
+        "MachineGroupedList: selectedMachine atualizado:",
+        selectedMachine.codigo,
+      );
     } else {
       console.log("MachineGroupedList: selectedMachine é null");
     }
@@ -96,10 +112,16 @@ export default function MachineGroupedList() {
                       className="flex items-center justify-center w-7 h-7 rounded-lg"
                       style={{ backgroundColor: `${config.color}18` }}
                     >
-                      <Icon size={14} strokeWidth={2.2} style={{ color: config.color }} />
+                      <Icon
+                        size={14}
+                        strokeWidth={2.2}
+                        style={{ color: config.color }}
+                      />
                     </div>
 
-                    <h2 className="text-sm font-semibold text-gray-700">{status}</h2>
+                    <h2 className="text-sm font-semibold text-gray-700">
+                      {status}
+                    </h2>
 
                     <span
                       className="text-xs font-semibold px-2 py-0.5 rounded-full border"
@@ -113,15 +135,18 @@ export default function MachineGroupedList() {
                     </span>
 
                     {/* Linha separadora */}
-                    <div className="flex-1 h-px" style={{ backgroundColor: `${config.color}20` }} />
+                    <div
+                      className="flex-1 h-px"
+                      style={{ backgroundColor: `${config.color}20` }}
+                    />
                   </div>
 
                   {/* Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {items.map((machine) => (
-                      <CardMachine 
-                        key={machine.id} 
-                        machine={machine} 
+                      <CardMachine
+                        key={machine.id}
+                        machine={machine}
                         onSelectMachine={handleSelectMachine}
                       />
                     ))}

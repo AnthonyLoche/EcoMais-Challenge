@@ -66,7 +66,7 @@ export default function HeaderMain() {
   // Obter iniciais do usuário para o avatar
   const getUserInitials = () => {
     if (user?.email) {
-      const name = user.email.split('@')[0];
+      const name = user.email.split("@")[0];
       return name.substring(0, 2).toUpperCase();
     }
     return "AP";
@@ -74,10 +74,13 @@ export default function HeaderMain() {
 
   const getUserName = () => {
     if (user?.email) {
-      const name = user.email.split('@')[0];
-      return name.replace(/\./g, ' ').replace(/_/g, ' ').split(' ').map(
-        word => word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' ');
+      const name = user.email.split("@")[0];
+      return name
+        .replace(/\./g, " ")
+        .replace(/_/g, " ")
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
     }
     return "Usuário";
   };
@@ -90,7 +93,6 @@ export default function HeaderMain() {
     <header className="w-full bg-[#0d1117] border-b border-white/5 select-none">
       <div className="w-[90%] mx-auto p-4">
         <div className="flex items-center h-12 gap-8">
-
           {/* Logo */}
           <Link to="/" className="flex items-center shrink-0">
             <img src={logo} alt="Logo" className="w-full h-14 mr-2" />
@@ -108,9 +110,10 @@ export default function HeaderMain() {
                   className={`
                     flex items-center gap-2 px-4 py-2 rounded text-base font-medium
                     transition-colors duration-150
-                    ${isActive
-                      ? "text-green-400"
-                      : "text-gray-400 hover:text-gray-200"
+                    ${
+                      isActive
+                        ? "text-green-400"
+                        : "text-gray-400 hover:text-gray-200"
                     }
                   `}
                 >
@@ -166,42 +169,48 @@ export default function HeaderMain() {
                 <div className="absolute right-0 top-full mt-2 w-48 bg-[#161b22] border border-white/10 rounded-lg shadow-xl overflow-hidden z-50">
                   {/* Info do usuário */}
                   <div className="px-4 py-3 border-b border-white/10">
-                    <p className="text-sm font-semibold text-white">{getUserName()}</p>
-                    <p className="text-xs text-gray-500 truncate">{getUserEmail()}</p>
+                    <p className="text-sm font-semibold text-white">
+                      {getUserName()}
+                    </p>
+                    <p className="text-xs text-gray-500 truncate">
+                      {getUserEmail()}
+                    </p>
                   </div>
 
                   {/* Itens do menu */}
                   <div className="py-1">
-                    {dropdownItems.map(({ label, icon: Icon, path, action, danger }) => (
-                      <button
-                        key={label}
-                        onClick={() => {
-                          if (action) {
-                            action();
-                          } else if (path) {
-                            setDropdownOpen(false);
-                            navigate(path);
-                          }
-                        }}
-                        className={`
+                    {dropdownItems.map(
+                      ({ label, icon: Icon, path, action, danger }) => (
+                        <button
+                          key={label}
+                          onClick={() => {
+                            if (action) {
+                              action();
+                            } else if (path) {
+                              setDropdownOpen(false);
+                              navigate(path);
+                            }
+                          }}
+                          className={`
                           w-full flex items-center gap-3 px-4 py-2.5 text-sm
                           transition-colors duration-150
-                          ${danger
-                            ? "text-red-400 hover:bg-red-500/10"
-                            : "text-gray-400 hover:text-gray-100 hover:bg-white/5"
+                          ${
+                            danger
+                              ? "text-red-400 hover:bg-red-500/10"
+                              : "text-gray-400 hover:text-gray-100 hover:bg-white/5"
                           }
                         `}
-                      >
-                        <Icon size={15} strokeWidth={1.8} />
-                        {label}
-                      </button>
-                    ))}
+                        >
+                          <Icon size={15} strokeWidth={1.8} />
+                          {label}
+                        </button>
+                      ),
+                    )}
                   </div>
                 </div>
               )}
             </div>
           </div>
-
         </div>
       </div>
     </header>

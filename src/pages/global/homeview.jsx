@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useMachines } from "../../hooks";
-import { HeaderMain, TitleSection, CardsSection, MachinesMain } from "../../components";
+import { HeaderMain, TitleSection, CardsSection, MachinesMain, GraphsSection } from "../../components";
 
 export default function Home() {
   // eslint-disable-next-line no-unused-vars
@@ -15,6 +15,7 @@ export default function Home() {
       <HeaderMain />
       <TitleSection title="Visão Geral" />
       <CardsSection />
+      <GraphsSection />
       <TitleSection title="Máquinas" />
       <MachinesMain />
 

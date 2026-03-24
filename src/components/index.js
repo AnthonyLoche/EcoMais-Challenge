@@ -4,3 +4,4 @@ export { default as MetricsCard } from "./global/metrics-card";
 export { default as CardsSection } from "./pages/homeview/cards-section";
 export { default as MachinesMain } from "./pages/homeview/machines-main";
 export { default as MachineGroupedList } from "./pages/homeview/machines-list";
+export { default as GraphsSection } from "./pages/homeview/graphs-section";
