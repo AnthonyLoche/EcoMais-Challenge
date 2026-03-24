@@ -5,3 +5,5 @@ export { default as CardsSection } from "./pages/homeview/cards-section";
 export { default as MachinesMain } from "./pages/homeview/machines-main";
 export { default as MachineGroupedList } from "./pages/homeview/machines-list";
 export { default as GraphsSection } from "./pages/homeview/graphs-section";
+export { default as RightPanel } from "./pages/loginview/right-panel";
+export { default as LeftPanel } from "./pages/loginview/left-panel";
