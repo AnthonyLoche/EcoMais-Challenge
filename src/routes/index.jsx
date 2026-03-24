@@ -5,6 +5,8 @@ import {
   ForecastsView,
   MachinesCNCView,
   AnalysesView,
+  ProfileView,
+  SettingsView,
 } from "../pages/index";
 
 import { useAuth } from "../hooks";
@@ -34,6 +36,8 @@ export function Router() {
           <Route path="/forecasts" element={<ForecastsView />} />
           <Route path="/machinescnc" element={<MachinesCNCView />} />
           <Route path="/analyses" element={<AnalysesView />} />
+          <Route path="/perfil" element={<ProfileView />} />
+          <Route path="/configuracoes" element={<SettingsView />} />
         </Route>
       </Routes>
     </BrowserRouter>

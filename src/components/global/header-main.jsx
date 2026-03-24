@@ -117,22 +117,6 @@ export default function HeaderMain() {
           </nav>
 
           <div className="flex items-center gap-1 shrink-0">
-            <button
-              onClick={() => navigate("/busca")}
-              className="p-2 text-gray-400 hover:text-gray-200 hover:bg-white/5 rounded transition-colors"
-              aria-label="Buscar"
-            >
-              <Search size={18} strokeWidth={1.8} />
-            </button>
-
-            <button
-              onClick={() => navigate("/notificacoes")}
-              className="p-2 text-gray-400 hover:text-gray-200 hover:bg-white/5 rounded transition-colors"
-              aria-label="Notificações"
-            >
-              <Bell size={18} strokeWidth={1.8} />
-            </button>
-
             <div className="relative ml-1" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen((prev) => !prev)}

@@ -3,3 +3,5 @@ export { default as LoginView } from "./auth/loginview";
 export { default as ForecastsView } from "./global/forecastsview";
 export { default as MachinesCNCView } from "./global/machinescncview";
 export { default as AnalysesView } from "./global/analysesview";
+export { default as ProfileView } from "./auth/profileview";
+export { default as SettingsView } from "./auth/settingsview";
