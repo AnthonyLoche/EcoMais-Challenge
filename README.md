@@ -2,6 +2,16 @@
 
 > Desafio técnico frontend — aplicação React para monitoramento e gestão de máquinas CNC em tempo real.
 
+---
+
+<center>
+
+## 🚀 Acesse a Aplicação
+
+### 🔗 [eco-mais-challenge.vercel.app](https://eco-mais-challenge.vercel.app/)
+
+</center>
+
 <img src="./geral.png" alt="Visão Geral do Projeto" width="100%"/>
 
 ---
@@ -41,7 +51,8 @@ Uma tela de **login** foi adicionada por decisão própria — embora não pedid
 | **React Router v6** | Roteamento com suporte a rotas protegidas via `ProtectedRoute` / `PublicRoute` |
 | **Recharts** | Gráficos e visualizações de dados com boa integração ao ecossistema React |
 | **Sonner** | Toasts leves e acessíveis para feedback de ações do usuário |
-| **Lucide React** | Ícones consistentes e tree-shakeable |
+| **Lucide React** | Ícones |
+| **Vercel** | Plataforma de deploy e hospedagem |
 
 ---
 
@@ -120,7 +131,7 @@ components/pages/  ← UI — consome hooks exclusivamente, nunca a store direta
 | `/configuracoes` | `SettingsView` | Autenticado |
 | `*` | Redireciona para `/not-found` | — |
 
-Tentativas de acessar rotas protegidas sem autenticação exibem um toast de aviso e redirecionam para `/login`.
+Tentativas de acessar rotas protegidas sem autenticação redirecionam para `/login`.
 
 ---
 
@@ -192,9 +203,13 @@ O gif de carregamento foi gerado com inteligência artificial usando a logo da E
 
 Fico a disposição para esclarecer quaisquer dúvidas sobre as decisões técnicas, arquitetura ou implementação. Agradeço a oportunidade de participar deste processo seletivo e estou aberto a feedbacks construtivos para aprimorar ainda mais o projeto!
 
+E torço para que este projeto seja um passo importante na minha jornada profissional, e que eu possa integrar-me à equipe da Eco+.
+
+Muito obrigado pela atenção e consideração😊!
+
 Contato:
 - LinkedIn: [linkedin.com/in/anthony-loche](https://www.linkedin.com/in/anthony-reis-282663291/)
 - Email: anthonylocheifc@gmail.com
-- GitHub: [github.com/AnthonyLoche]
+- GitHub: [github.com/AnthonyLoche](https://github.com/AnthonyLoche)
 - Portfólio: [anthony-loche.dev](https://my-portfolio-anthonygabriel.vercel.app/)
 - Telefone: (47) 99963-6618
