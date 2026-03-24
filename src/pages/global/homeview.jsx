@@ -4,7 +4,7 @@ import { HeaderMain, TitleSection, CardsSection, MachinesMain, GraphsSection } f
 
 export default function Home() {
   // eslint-disable-next-line no-unused-vars
-  const { state, getMachines, types_machines, selectedMachine } = useMachines();
+  const { state, getMachines } = useMachines();
 
   useEffect(() => {
     getMachines();
@@ -20,8 +20,6 @@ export default function Home() {
       <MachinesMain />
 
       {/* <pre>{JSON.stringify(state, null, 2)}</pre> */}
-      {/* <pre>{JSON.stringify(types_machines, null, 2)}</pre> */}
-      {/* <pre>{JSON.stringify(selectedMachine, null, 2)}</pre> */}
     </div>
   );
 }

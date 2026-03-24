@@ -1,8 +1,12 @@
-// tabs/TabEstatisticas.jsx
+// tabs/TabEstatisticas.jsx (MachineModalEdit)
 import { useState } from "react";
 import { MapPin, FileText, Tag } from "lucide-react";
+import { toast } from "sonner";
+import { useMachines } from "../../../../hooks";
 
 export default function MachineModalEdit({ machine, onSave }) {
+  const { updateMachine } = useMachines();
+
   const [form, setForm] = useState({
     nome: machine?.codigo ?? "",
     descricao: machine?.descricao ?? "",
@@ -13,8 +17,30 @@ export default function MachineModalEdit({ machine, onSave }) {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = () => {
-    onSave?.({ ...machine, ...form });
+  const handleSubmit = async () => {
+    // Validação dos campos obrigatórios
+    if (!form.nome.trim()) {
+      toast.error("O campo Nome é obrigatório.");
+      return;
+    }
+    if (!form.local.trim()) {
+      toast.error("O campo Local é obrigatório.");
+      return;
+    }
+
+    try {
+      const payload = {
+        codigo: form.nome.trim(),
+        descricao: form.descricao.trim(),
+        local: form.local.trim(),
+      };
+
+      const updated = await updateMachine(machine.id, payload);
+      toast.success("Máquina atualizada com sucesso!");
+      onSave?.(updated);
+    } catch (error) {
+      toast.error(error?.message ?? "Erro ao atualizar a máquina. Tente novamente.");
+    }
   };
 
   const fields = [
@@ -77,7 +103,6 @@ export default function MachineModalEdit({ machine, onSave }) {
         </div>
       ))}
 
-      {/* Botão salvar */}
       <button
         onClick={handleSubmit}
         className="mt-auto w-full py-2.5 rounded-xl bg-green-500 hover:bg-green-600
