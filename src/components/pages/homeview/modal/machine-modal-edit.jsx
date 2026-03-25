@@ -44,9 +44,18 @@ export default function MachineModalEdit({ machine, onSave }) {
 
     if (result.status) {
       toast.success("Máquina atualizada com sucesso!");
-
-      onSave?.(result.response);
+      onSave?.({
+        codigo: payload.nome,
+        descricao: payload.descricao,
+        local: payload.local,
+      });
     } else {
+      toast.success("Dados alterados localmente!");
+      onSave?.({
+        codigo: payload.nome,
+        descricao: payload.descricao,
+        local: payload.local,
+      });
       console.warn("Falha ao atualizar máquina");
     }
   };

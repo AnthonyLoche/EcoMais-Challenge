@@ -7,7 +7,7 @@ import {
   setSelectedMachine,
   clearSelectedMachine,
   setErrorUpdate,
-  setErrorFetch
+  setErrorFetch,
 } from "../../store/slices/machinesSlice";
 import { useLoading } from "../global/useLoading";
 import { toast } from "sonner";
@@ -42,11 +42,7 @@ export function useMachines() {
     if (!error?.response) {
       return "Sem conexão com o servidor ou bloqueio de CORS.";
     }
-    return (
-      error.response?.data?.message ||
-      error.message ||
-      "Erro inesperado."
-    );
+    return error.response?.data?.message || error.message || "Erro inesperado.";
   };
 
   const machinesByStatus = useMemo(() => {
@@ -121,18 +117,32 @@ export function useMachines() {
           return { status: true, response: updated };
         } catch (error) {
           const message = getErrorMessage(error);
-
           console.error("updateMachine error:", error);
 
-          dispatch(setErrorUpdate(message));
+          const machines = state.machines?.machines ?? state.machines ?? [];
+          const currentMachine = Array.isArray(machines)
+            ? machines.find((m) => m.id === id)
+            : null;
 
-          toast.error(message);
+          if (currentMachine) {
+            dispatch(
+              updateMachineAction({
+                ...currentMachine,
+                codigo: payload.nome ?? currentMachine.codigo,
+                descricao: payload.descricao ?? currentMachine.descricao,
+                local: payload.local ?? currentMachine.local,
+              }),
+            );
+          }
+
+          dispatch(setErrorUpdate(message));
+          toast.error(message); 
 
           return { status: false };
         }
       }, "Atualizando máquina...");
     },
-    [dispatch, withLoading],
+    [dispatch, withLoading, state.machines],
   );
 
   const selectMachine = useCallback(
@@ -179,8 +189,7 @@ export function useMachines() {
       dadosOrdenados[dadosOrdenados.length - 1].timestamp,
     );
 
-    const totalHoras =
-      (ultimoTimestamp - primeiroTimestamp) / (1000 * 60 * 60);
+    const totalHoras = (ultimoTimestamp - primeiroTimestamp) / (1000 * 60 * 60);
 
     return {
       id: machine.id,

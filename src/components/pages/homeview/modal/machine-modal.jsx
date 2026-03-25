@@ -10,9 +10,14 @@ import MachineModalEdit from "./machine-modal-edit";
 
 export default function MachineModal({ machine, onClose, onPrev, onNext }) {
   const [activeTab, setActiveTab] = useState("resumo");
+  const [localMachine, setLocalMachine] = useState(machine);
   const { calcularMetricasMaquinaFormatada } = useMachines();
 
-  if (!machine) return null;
+  if (!localMachine) return null;
+
+  const handleSave = (updated) => {
+    setLocalMachine((prev) => ({ ...prev, ...updated }));
+  };
 
   const tabs = [
     { key: "resumo",       label: "Resumo"       },
@@ -26,14 +31,20 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
       case "resumo":
         return (
           <TabResumo
-            machine={machine}
+            machine={localMachine}
             calcularMetricasMaquinaFormatada={calcularMetricasMaquinaFormatada}
           />
         );
-      case "historico":    return <TabHistorico machine={machine} />;
-      case "estatisticas": return <TabEstatisticas machine={machine} />;
-      case "editar":       return <MachineModalEdit machine={machine} />;
-      default:             return null;
+      case "historico":    return <TabHistorico machine={localMachine} />;
+      case "estatisticas": return <TabEstatisticas machine={localMachine} />;
+      case "editar":
+        return (
+          <MachineModalEdit
+            machine={localMachine}
+            onSave={handleSave}
+          />
+        );
+      default: return null;
     }
   };
 
@@ -48,7 +59,7 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
         "
       >
         <MachineModalHeader
-          machine={machine}
+          machine={localMachine}
           onPrev={onPrev}
           onNext={onNext}
           onClose={onClose}
@@ -56,7 +67,7 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
 
         <div className="hidden sm:flex flex-1 min-h-0">
           <div className="w-[35%] shrink-0 border-r border-gray-100 overflow-hidden">
-            <MachineModalLeftPanel machine={machine} />
+            <MachineModalLeftPanel machine={localMachine} />
           </div>
 
           <div className="w-[65%] flex flex-col min-w-0 overflow-hidden">
@@ -75,7 +86,7 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
 
         <div className="flex sm:hidden flex-col flex-1 min-h-0 overflow-hidden">
           <div className="shrink-0 border-b border-gray-100 overflow-hidden" style={{ maxHeight: "38%" }}>
-            <MachineModalLeftPanel machine={machine} />
+            <MachineModalLeftPanel machine={localMachine} />
           </div>
 
           <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
