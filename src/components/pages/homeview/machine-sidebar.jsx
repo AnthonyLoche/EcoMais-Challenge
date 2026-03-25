@@ -13,13 +13,7 @@ import {
   Power,
   TrendingDown,
 } from "lucide-react";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useMachines } from "../../../hooks";
 
 const getStatusColor = (status) => {
@@ -79,7 +73,10 @@ function DonutChart({ data }) {
             stroke="none"
           >
             {data.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
             ))}
           </Pie>
           <Tooltip
@@ -317,7 +314,7 @@ export default function MachineSidebar() {
   }
 
   return (
-    <div className="w-full h-full bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col overflow-hidden">
+    <div className="w-full bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col lg:h-full lg:overflow-hidden">
       <div className="flex items-center border-b border-gray-100 px-2 pt-2 shrink-0">
         {[
           { key: "analise", label: "Análise", icon: BarChart2 },

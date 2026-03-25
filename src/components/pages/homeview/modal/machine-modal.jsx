@@ -49,7 +49,7 @@ export default function MachineModal({ machine, onClose, onPrev, onNext }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/40 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center sm:p-4 bg-black/40 backdrop-blur-sm">
       <div
         className="
           bg-white shadow-2xl w-full flex flex-col overflow-hidden

@@ -17,8 +17,10 @@ export default function MachinesMain() {
         </div>
       </div>
 
-      <div className="lg:hidden w-full flex flex-col" style={{ height: "calc(100vh - 5rem)" }}>
-
+      <div
+        className="lg:hidden w-full flex flex-col"
+        style={{ height: "calc(100vh - 5rem)" }}
+      >
         <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-4 pt-4">
           <MachineGroupedList />
         </div>
@@ -45,22 +47,21 @@ export default function MachinesMain() {
         `}
         onClick={() => setSidebarOpen(false)}
       />
-
       <div
         className={`
-          lg:hidden fixed bottom-0 left-0 right-0 z-50
-          bg-white rounded-t-2xl shadow-2xl
-          transition-transform duration-300 ease-in-out
-          flex flex-col
-          ${sidebarOpen ? "translate-y-0" : "translate-y-full"}
-        `}
+    lg:hidden fixed bottom-0 left-0 right-0 z-50
+    bg-white rounded-t-2xl shadow-2xl
+    transition-transform duration-300 ease-in-out
+    flex flex-col
+    ${sidebarOpen ? "translate-y-0" : "translate-y-full"}
+  `}
         style={{ height: "82vh" }}
       >
         <div className="flex items-center justify-between px-4 pt-3 pb-2 shrink-0">
           <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-10 h-1 rounded-full bg-gray-200" />
-
-          <span className="text-sm font-semibold text-gray-700 mt-2">Análise & Previsões</span>
-
+          <span className="text-sm font-semibold text-gray-700 mt-2">
+            Análise & Previsões
+          </span>
           <button
             onClick={() => setSidebarOpen(false)}
             className="mt-2 p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-400"
@@ -70,7 +71,11 @@ export default function MachinesMain() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-hidden px-3 pb-4">
+        {/* ✅ este div agora faz o scroll */}
+        <div
+          className="flex-1 overflow-y-auto px-3 pb-6"
+          style={{ WebkitOverflowScrolling: "touch" }} // ✅ essencial no iOS
+        >
           <MachineSidebar />
         </div>
       </div>
